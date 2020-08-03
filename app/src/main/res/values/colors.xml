@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#eeeeee</color>
+    <color name="colorPrimaryDark">#bcbcbc</color>
+    <color name="colorAccent">@android:color/holo_blue_dark</color>
+    <color name="colorBackground">#FFFFFF</color>
+    <color name="editTextColor">#E4E4E4</color>
+    <color name="colorText">#000000</color>
+    <color name="colorButton">#000000</color>
+    <color name="colorButtonPressed">#8D8D8D</color>
+    <color name="colorError">#AE1D1D</color>
+    <color name="colorSuccess">#31A631</color>
+</resources>

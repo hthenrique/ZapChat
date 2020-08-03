@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorBackground" format="color"/>
+    <attr name="editTextColor" format="color"/>
+    <attr name="colorText" format="color"/>
+    <attr name="colorTint" format="color"/>
+    <attr name="colorButton" format="color"/>
+    <attr name="colorButtonPressed" format="color"/>
+    <attr name="colorError" format="color"/>
+    <attr name="colorSuccess" format="color"/>
+</resources>

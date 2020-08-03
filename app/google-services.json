@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "725734450224",
+    "firebase_url": "https://zapchat-857b9.firebaseio.com",
+    "project_id": "zapchat-857b9",
+    "storage_bucket": "zapchat-857b9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:725734450224:android:f82e2e576365007da2b9f5",
+        "android_client_info": {
+          "package_name": "com.example.zapchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "725734450224-m26vjp2jqks387hek2gudqtb93922e34.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAISjsbhsVae01ay9WPrPi14BpnC2UDaoM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "725734450224-m26vjp2jqks387hek2gudqtb93922e34.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
