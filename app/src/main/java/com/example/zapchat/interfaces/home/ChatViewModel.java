@@ -1,19 +1,19 @@
-package com.example.zapchat.ui.profile;
+package com.example.zapchat.interfaces.home;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class ProfileViewModel extends ViewModel {
+public class ChatViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public ProfileViewModel(){
+    public ChatViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("Profile Name");
+        mText.setValue("This is home fragment");
     }
 
-    public LiveData<String> getText(){
+    public LiveData<String> getText() {
         return mText;
     }
 }

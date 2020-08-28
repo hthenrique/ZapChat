@@ -1,16 +1,16 @@
-package com.example.zapchat.ui.settings;
+package com.example.zapchat.interfaces.profile;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class SettingsViewModel extends ViewModel {
+public class ProfileViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public SettingsViewModel(){
+    public ProfileViewModel(){
         mText = new MutableLiveData<>();
-        mText.setValue("Settings");
+        mText.setValue("Profile Name");
     }
 
     public LiveData<String> getText(){

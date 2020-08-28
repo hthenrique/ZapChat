@@ -1,4 +1,4 @@
-package com.example.zapchat.ui.profile;
+package com.example.zapchat.interfaces.feeds;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,18 +13,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.zapchat.R;
 
+public class FeedsFragment extends Fragment {
 
-public class ProfileFragment extends Fragment {
-
-    private ProfileViewModel profileViewModel;
+    private FeedsViewModel feedsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        profileViewModel =
-                ViewModelProviders.of(this).get(ProfileViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_profile, container, false);
+        feedsViewModel =
+                ViewModelProviders.of(this).get(FeedsViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_feeds, container, false);
 
-        profileViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        feedsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
 
@@ -32,5 +31,4 @@ public class ProfileFragment extends Fragment {
         });
         return root;
     }
-
 }

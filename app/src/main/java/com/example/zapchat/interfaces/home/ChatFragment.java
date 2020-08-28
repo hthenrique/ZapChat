@@ -1,9 +1,10 @@
-package com.example.zapchat.ui.feeds;
+package com.example.zapchat.interfaces.home;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,22 +14,24 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.zapchat.R;
 
-public class FeedsFragment extends Fragment {
+public class ChatFragment extends Fragment {
 
-    private FeedsViewModel feedsViewModel;
+    private ChatViewModel chatViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        feedsViewModel =
-                ViewModelProviders.of(this).get(FeedsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_feeds, container, false);
-
-        feedsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        chatViewModel =
+                ViewModelProviders.of(this).get(ChatViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_chat, container, false);
+        final TextView textView = root.findViewById(R.id.text_home);
+        chatViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-
+                textView.setText(s);
             }
         });
+
+
         return root;
     }
 }

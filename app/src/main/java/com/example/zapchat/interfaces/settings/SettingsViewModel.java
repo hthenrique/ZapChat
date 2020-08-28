@@ -1,19 +1,19 @@
-package com.example.zapchat.ui.home;
+package com.example.zapchat.interfaces.settings;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class ChatViewModel extends ViewModel {
+public class SettingsViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public ChatViewModel() {
+    public SettingsViewModel(){
         mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        mText.setValue("Settings");
     }
 
-    public LiveData<String> getText() {
+    public LiveData<String> getText(){
         return mText;
     }
 }

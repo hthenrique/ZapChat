@@ -1,16 +1,16 @@
-package com.example.zapchat.ui.feeds;
+package com.example.zapchat.interfaces.chat;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class FeedsViewModel extends ViewModel {
+public class ChatViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public FeedsViewModel() {
+    public ChatViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is dashboard fragment");
+        mText.setValue("No Conversation");
     }
 
     public LiveData<String> getText() {
