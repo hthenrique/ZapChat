@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_chat"
-        android:name="com.example.zapchat.interfaces.home.ChatFragment"
+        android:name="com.example.zapchat.ui.home.ChatFragment"
         android:label="@string/title_chat"
         tools:layout="@layout/fragment_chat" >
         <action
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/navigation_feeds"
-        android:name="com.example.zapchat.interfaces.feeds.FeedsFragment"
+        android:name="com.example.zapchat.ui.feeds.FeedsFragment"
         android:label="@string/title_feeds"
         tools:layout="@layout/fragment_feeds" >
         <action
@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.example.zapchat.interfaces.notifications.NotificationsFragment"
+        android:name="com.example.zapchat.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" >
         <action
@@ -37,7 +37,7 @@
 
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.example.zapchat.interfaces.profile.ProfileFragment"
+        android:name="com.example.zapchat.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile" >
         <action
@@ -47,7 +47,7 @@
 
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.example.zapchat.interfaces.settings.SettingsFragment"
+        android:name="com.example.zapchat.ui.settings.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
 </navigation>
