@@ -18,10 +18,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.zapchat.R;
+import com.example.zapchat.ui.data.User;
 import com.example.zapchat.ui.ui.login.LoginActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -36,8 +39,10 @@ public class RegisterActivity extends AppCompatActivity {
     EditText registerName, registerEmail, registerPassword, registerConfirmPass;
     Button registerButton, btn_selectPhoto;
     String nameUser, emailUser, passUser, cPassUser;
+    String uid, username, profileUrl;
     ImageView imagePhoto;
     Uri selectedUri;
+    User user;
     static Bitmap bitmap;
 
     @Override
@@ -67,6 +72,7 @@ public class RegisterActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent, 0);
+        onPause();
     }
 
     @Override
@@ -74,15 +80,21 @@ public class RegisterActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 0){
-            selectedUri = data.getData();
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedUri);
-                Matrix matrix = new Matrix();
-                matrix.postRotate(90); //  ROTAÇÃO QUE OCORRERÁ NA IMAGEM
-                Bitmap bitmapRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                imagePhoto.setImageBitmap(bitmapRotated);
-            } catch (IOException e) {
+            if (selectedUri != null){
+                selectedUri = data.getData();
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedUri);
+                    Matrix matrix = new Matrix();
+                    matrix.postRotate(90);
+                    Bitmap bitmapRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                    imagePhoto.setImageBitmap(bitmapRotated);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }else {
+                onStart();
             }
+
         }
     }
 
@@ -119,14 +131,56 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void saveUserFirebase() {
         String fileName = UUID.randomUUID().toString();
-        final StorageReference ref = FirebaseStorage.getInstance().getReference("/images/" + fileName);
-        ref.putFile(selectedUri)
-                .addOnSuccessListener(taskSnapshot -> {
-                    ref.getDownloadUrl().addOnSuccessListener(uri -> Log.i("Test", uri.toString()));
-                })
-                .addOnFailureListener(e -> {
-                    Log.i("test fail", e.getMessage(), e);
-                });
+        if (selectedUri != null){
+            final StorageReference ref = FirebaseStorage.getInstance().getReference("/images/" + fileName);
+            ref.putFile(selectedUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        ref.getDownloadUrl().addOnSuccessListener(uri -> Log.i("Test", uri.toString()));
+
+                        uid = FirebaseAuth.getInstance().getUid();
+                        username = registerName.getText().toString();
+                        profileUrl = selectedUri.toString();
+                        user = new User(uid, username, profileUrl);
+
+                        FirebaseFirestore.getInstance().collection("users")
+                                .add(user)
+                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        Log.i("Test", documentReference.getId());
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.i("test fail 2", e.getMessage(), e);
+                                    }
+                                });
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.i("test fail", e.getMessage(), e);
+                    });
+        }else {
+            uid = FirebaseAuth.getInstance().getUid();
+            username = registerName.getText().toString();
+            user = new User(uid, username,null);
+
+            FirebaseFirestore.getInstance().collection("users")
+                    .add(user)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Log.i("Test", documentReference.getId());
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.i("test fail 2", e.getMessage(), e);
+                        }
+                    });
+        }
+
         Toast.makeText(RegisterActivity.this, "User created", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

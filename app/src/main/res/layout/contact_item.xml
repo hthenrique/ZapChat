@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <LinearLayout
@@ -12,7 +12,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/contactPhoto"
             android:layout_width="59dp"
             android:layout_height="59dp"
             android:layout_gravity="center"
@@ -30,7 +30,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/usernameChat"
+                android:id="@+id/contactName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="User"
@@ -38,11 +38,11 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Conversation" />
+                android:text="Conversation" />-->
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -4,4 +4,58 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.profile.ProfileFragment"/>
+    tools:context=".ui.profile.ProfileFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/btn_editPhoto"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bk_button_rounded"
+            android:foreground="@drawable/ic_baseline_edit_24"
+            android:foregroundGravity="center"
+            android:foregroundTint="@color/colorBackground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageView2"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:background="@drawable/bk_button_photo_rounded"
+            android:src="@drawable/ic_baseline_person_24"
+            app:civ_border_color="@color/colorAccent"
+            app:civ_border_width="3dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="User Name"
+            android:textSize="30sp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

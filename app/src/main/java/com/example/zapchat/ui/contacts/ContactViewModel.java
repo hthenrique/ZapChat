@@ -1,19 +1,19 @@
-package com.example.zapchat.ui.home;
+package com.example.zapchat.ui.contacts;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class ChatViewModel extends ViewModel {
+public class ContactViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public ChatViewModel() {
+    public ContactViewModel(){
         mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        mText.setValue("No Contacts");
     }
 
-    public LiveData<String> getText() {
+    public LiveData<String> getText(){
         return mText;
     }
 }

@@ -30,4 +30,5 @@
     <string name="login_failed">"Login failed"</string>
     <string name="newUser">Create new account here.</string>
     <string name="logout">Logout</string>
+    <string name="Contacts">Contacts</string>
 </resources>
