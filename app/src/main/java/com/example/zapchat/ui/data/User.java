@@ -26,4 +26,7 @@ public class User {
     public String getProfileUrl() {
         return profileUrl;
     }
+    public void setProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
+    }
 }

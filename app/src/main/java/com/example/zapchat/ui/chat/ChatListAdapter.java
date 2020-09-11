@@ -57,7 +57,6 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         TextView usernameChat;
         ViewHolder(View noteView) {
             super(noteView);
-
             usernameChat = noteView.findViewById(R.id.usernameChat);
         }
     }

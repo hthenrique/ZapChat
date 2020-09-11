@@ -45,6 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
     User user;
     static Bitmap bitmap;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,34 +70,38 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     private void selectPhoto() {
+        onStart();
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent, 0);
-        onPause();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 0){
-            if (selectedUri != null){
-                selectedUri = data.getData();
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedUri);
-                    Matrix matrix = new Matrix();
-                    matrix.postRotate(90);
-                    Bitmap bitmapRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                    imagePhoto.setImageBitmap(bitmapRotated);
-                } catch (IOException e) {
-                    e.printStackTrace();
+        switch (requestCode){
+            case 0:
+                if (data!=null){
+                    if (data.getData()!=null){
+                        selectedUri = data.getData();
+                        try {
+                            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedUri);
+                            Matrix matrix = new Matrix();
+                            matrix.postRotate(90);
+                            Bitmap bitmapRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                            imagePhoto.setImageBitmap(bitmapRotated);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
-            }else {
-                onStart();
-            }
-
+                break;
+            default:break;
         }
+
     }
+
 
     private void createUser() {
         nameUser = registerName.getText().toString();
@@ -163,7 +168,8 @@ public class RegisterActivity extends AppCompatActivity {
         }else {
             uid = FirebaseAuth.getInstance().getUid();
             username = registerName.getText().toString();
-            user = new User(uid, username,null);
+            profileUrl = null;
+            user = new User(uid, username,profileUrl);
 
             FirebaseFirestore.getInstance().collection("users")
                     .add(user)
