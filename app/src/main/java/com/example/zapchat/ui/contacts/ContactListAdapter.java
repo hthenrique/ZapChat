@@ -21,13 +21,15 @@ import java.util.List;
 public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ViewHolder> {
 
     ArrayList<String> mContactList;
-    //List<ContactsActivity> contactsLists;
+    ArrayList<String> profilePhotoList;
     LayoutInflater mInflater;
+    Context context;
     User user;
     //List<ContactListAdapter>mContactList;
-    public ContactListAdapter(ContactsActivity contactsLists, ArrayList<String> names){
+    public ContactListAdapter(ContactsActivity contactsLists, ArrayList<String> names, ArrayList<String> profilePhoto){
         this.mInflater = LayoutInflater.from(contactsLists);
         this.mContactList = names;
+        this.profilePhotoList = profilePhoto;
         //setList(contactList);
     }
 
@@ -38,7 +40,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     @NonNull
     @Override
     public ContactListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
+        context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View noteView = inflater.inflate(R.layout.contact_item, parent, false);
         return new ContactListAdapter.ViewHolder(noteView);
@@ -47,6 +49,11 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String contacts = mContactList.get(position);
+        String photo = profilePhotoList.get(position);
+        Picasso.get()
+                .load(photo)
+                .placeholder(R.drawable.ic_baseline_person_24)
+                .into(holder.contactPhoto);
         holder.usernameCont.setText(contacts);
     }
 

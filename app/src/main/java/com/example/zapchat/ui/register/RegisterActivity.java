@@ -88,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
                         try {
                             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedUri);
                             Matrix matrix = new Matrix();
-                            matrix.postRotate(90);
+                            matrix.postRotate(0);
                             Bitmap bitmapRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
                             imagePhoto.setImageBitmap(bitmapRotated);
                         } catch (IOException e) {
@@ -168,8 +168,7 @@ public class RegisterActivity extends AppCompatActivity {
         }else {
             uid = FirebaseAuth.getInstance().getUid();
             username = registerName.getText().toString();
-            profileUrl = null;
-            user = new User(uid, username,profileUrl);
+            user = new User(uid, username, null);
 
             FirebaseFirestore.getInstance().collection("users")
                     .add(user)

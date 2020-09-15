@@ -1,4 +1,4 @@
-package com.example.zapchat.ui.chat;
+package com.example.zapchat.ui.messages;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,20 +13,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.zapchat.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHolder> {
+public class MessagesListAdapter extends RecyclerView.Adapter<MessagesListAdapter.ViewHolder> {
 
-    private ArrayList<String> mChatList;
+    private ArrayList<String> mMessageList;
     LayoutInflater mInflater;
 
    /* ChatListAdapter(List<ChatListAdapter> chatList){
         setList(chatList);
     }*/
 
-    public ChatListAdapter(FragmentActivity activity, ArrayList<String> names) {
+    public MessagesListAdapter(FragmentActivity activity, ArrayList<String> names) {
         this.mInflater = LayoutInflater.from(activity);
-        this.mChatList = names;
+        this.mMessageList = names;
     }
 
     /*private void setList(List<ChatListAdapter> chatList) {
@@ -38,26 +37,26 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View noteView = inflater.inflate(R.layout.chat_item, parent, false);
+        View noteView = inflater.inflate(R.layout.messages_item, parent, false);
         return new ViewHolder(noteView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String names = mChatList.get(position);
-        holder.usernameChat.setText(names);
+        String names = mMessageList.get(position);
+        holder.usernameMessage.setText(names);
     }
 
     @Override
     public int getItemCount() {
-        return mChatList.size();
+        return mMessageList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView usernameChat;
+        TextView usernameMessage;
         ViewHolder(View noteView) {
             super(noteView);
-            usernameChat = noteView.findViewById(R.id.usernameChat);
+            usernameMessage = noteView.findViewById(R.id.usernameMessage);
         }
     }
 }

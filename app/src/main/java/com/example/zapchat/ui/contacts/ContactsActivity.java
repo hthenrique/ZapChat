@@ -18,6 +18,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class ContactsActivity extends AppCompatActivity {
     TextView contactsText;
@@ -25,7 +26,7 @@ public class ContactsActivity extends AppCompatActivity {
     ContactListAdapter contactListAdapter;
     User user;
     ArrayList<String> contacts;
-    //List<String> documentSnapshots;
+    ArrayList<String> profilePhoto;
     FirebaseFirestore firebaseFirestore;
     private ContactViewModel contactViewModel;
 
@@ -49,10 +50,12 @@ public class ContactsActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
                         contacts = new ArrayList<>();
+                        profilePhoto = new ArrayList<>();
                         for (QueryDocumentSnapshot doc: task.getResult()){
                             Log.d("Test 1", doc.getId() + " => " + doc.getData());
                             user = doc.toObject(User.class);
                             Log.d("Test", user.getUsername() + user.getProfileUrl());
+
                             setContactList();
                         }
                     }
@@ -63,9 +66,10 @@ public class ContactsActivity extends AppCompatActivity {
 
         if (contacts != null){
             contacts.add(user.getUsername());
+            profilePhoto.add(user.getProfileUrl());
             Collections.sort(contacts);
             contactsList.setLayoutManager(new LinearLayoutManager(ContactsActivity.this));
-            contactListAdapter = new ContactListAdapter(ContactsActivity.this, contacts);
+            contactListAdapter = new ContactListAdapter(ContactsActivity.this, contacts, profilePhoto);
             contactsList.setHasFixedSize(true);
             contactsList.setAdapter(contactListAdapter);
         }else {

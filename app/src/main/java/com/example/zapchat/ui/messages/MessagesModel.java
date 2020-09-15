@@ -1,8 +1,8 @@
-package com.example.zapchat.ui.chat;
+package com.example.zapchat.ui.messages;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ChatModel {
+public class MessagesModel {
     @SerializedName("id")
     public String id;
 }

@@ -30,7 +30,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/usernameChat"
+                android:id="@+id/usernameMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="User"
