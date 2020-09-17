@@ -1,13 +1,17 @@
 package com.example.zapchat.ui.register;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.OrientationEventListener;
+import android.view.Surface;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -41,6 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
     String nameUser, emailUser, passUser, cPassUser;
     String uid, username, profileUrl;
     ImageView imagePhoto;
+    StorageReference storageReference;
     Uri selectedUri;
     User user;
     static Bitmap bitmap;
@@ -54,6 +59,7 @@ public class RegisterActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
 
         mAuth = FirebaseAuth.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference();
 
         imagePhoto = findViewById(R.id.imagePhoto);
         btn_selectPhoto = findViewById(R.id.btn_selectPhoto);
@@ -71,7 +77,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void selectPhoto() {
         onStart();
-        Intent intent = new Intent(Intent.ACTION_PICK);
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
         startActivityForResult(intent, 0);
     }
@@ -82,26 +88,68 @@ public class RegisterActivity extends AppCompatActivity {
 
         switch (requestCode){
             case 0:
-                if (data!=null){
+                if (data!=null)
                     if (data.getData()!=null){
                         selectedUri = data.getData();
                         try {
                             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedUri);
-                            Matrix matrix = new Matrix();
-                            matrix.postRotate(0);
-                            Bitmap bitmapRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                            imagePhoto.setImageBitmap(bitmapRotated);
+                            //Matrix matrix = new Matrix();
+                            //matrix.postRotate(90);
+                            //Bitmap bitmapRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                            imagePhoto.setImageBitmap(rotateBitmap(bitmap, ExifInterface.ORIENTATION_ROTATE_90));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }
-                }
                 break;
             default:break;
         }
 
     }
 
+    public static Bitmap rotateBitmap(Bitmap bitmap, int orientation) {
+
+        Matrix matrix = new Matrix();
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_NORMAL:
+                return bitmap;
+            case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
+                matrix.setScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.setRotate(180);
+                break;
+            case ExifInterface.ORIENTATION_FLIP_VERTICAL:
+                matrix.setRotate(180);
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_TRANSPOSE:
+                matrix.setRotate(90);
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                matrix.setRotate(90);
+                break;
+            case ExifInterface.ORIENTATION_TRANSVERSE:
+                matrix.setRotate(-90);
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                matrix.setRotate(-90);
+                break;
+            default:
+                return bitmap;
+        }
+        try {
+            Bitmap bmRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            bitmap.recycle();
+            return bmRotated;
+        }
+        catch (OutOfMemoryError e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     private void createUser() {
         nameUser = registerName.getText().toString();
@@ -137,53 +185,37 @@ public class RegisterActivity extends AppCompatActivity {
     private void saveUserFirebase() {
         String fileName = UUID.randomUUID().toString();
         if (selectedUri != null){
-            final StorageReference ref = FirebaseStorage.getInstance().getReference("/images/" + fileName);
-            ref.putFile(selectedUri)
+            uid = FirebaseAuth.getInstance().getUid();
+            username = registerName.getText().toString();
+            emailUser = registerEmail.getText().toString();
+            StorageReference fileRef = storageReference.child("users/" + uid + "/profile.jpg");
+            fileRef.putFile(selectedUri)
                     .addOnSuccessListener(taskSnapshot -> {
-                        ref.getDownloadUrl().addOnSuccessListener(uri -> Log.i("Test", uri.toString()));
-
-                        uid = FirebaseAuth.getInstance().getUid();
-                        username = registerName.getText().toString();
-                        profileUrl = selectedUri.toString();
-                        user = new User(uid, username, profileUrl);
-
-                        FirebaseFirestore.getInstance().collection("users")
-                                .add(user)
-                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                    @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                        Log.i("Test", documentReference.getId());
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.i("test fail 2", e.getMessage(), e);
-                                    }
-                                });
+                        fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                profileUrl = uri.toString();
+                                user = new User(uid, username, emailUser, profileUrl);
+                                FirebaseFirestore.getInstance().collection("users")
+                                        .add(user)
+                                        .addOnSuccessListener(documentReference -> Log.i("Upload user success", documentReference.getId()))
+                                        .addOnFailureListener(e -> Log.i("Upload user fail", e.getMessage(), e));
+                            }
+                        });
                     })
                     .addOnFailureListener(e -> {
-                        Log.i("test fail", e.getMessage(), e);
+                        Log.i("Upload image fail", e.getMessage(), e);
                     });
         }else {
             uid = FirebaseAuth.getInstance().getUid();
             username = registerName.getText().toString();
-            user = new User(uid, username, null);
+            emailUser = registerEmail.getText().toString();
+            user = new User(uid, username, emailUser, null);
 
             FirebaseFirestore.getInstance().collection("users")
                     .add(user)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Log.i("Test", documentReference.getId());
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.i("test fail 2", e.getMessage(), e);
-                        }
-                    });
+                    .addOnSuccessListener(documentReference -> Log.i("Upload user success", documentReference.getId()))
+                    .addOnFailureListener(e -> Log.i("Upload user fail", e.getMessage(), e));
         }
 
         Toast.makeText(RegisterActivity.this, "User created", Toast.LENGTH_SHORT).show();

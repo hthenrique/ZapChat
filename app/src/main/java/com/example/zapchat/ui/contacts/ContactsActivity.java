@@ -67,11 +67,11 @@ public class ContactsActivity extends AppCompatActivity {
         if (contacts != null){
             contacts.add(user.getUsername());
             profilePhoto.add(user.getProfileUrl());
-            Collections.sort(contacts);
             contactsList.setLayoutManager(new LinearLayoutManager(ContactsActivity.this));
             contactListAdapter = new ContactListAdapter(ContactsActivity.this, contacts, profilePhoto);
             contactsList.setHasFixedSize(true);
             contactsList.setAdapter(contactListAdapter);
+            Collections.sort(contacts);
         }else {
             contactViewModel = new ViewModelProvider(this).get(ContactViewModel.class);
             contactViewModel.getText().observe(this, s -> contactsText.setText(s));

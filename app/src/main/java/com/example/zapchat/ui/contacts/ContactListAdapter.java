@@ -52,7 +52,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         String photo = profilePhotoList.get(position);
         Picasso.get()
                 .load(photo)
-                .placeholder(R.drawable.ic_baseline_person_24)
+                //.placeholder(R.drawable.ic_baseline_person_24)
                 .into(holder.contactPhoto);
         holder.usernameCont.setText(contacts);
     }
