@@ -1,7 +1,10 @@
 package com.example.zapchat.ui.register;
 
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,7 +27,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
+import com.yalantis.ucrop.UCrop;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -36,9 +42,11 @@ public class RegisterActivity extends AppCompatActivity {
     String uid, username, profileUrl;
     ImageView imagePhoto;
     StorageReference storageReference;
-    Uri selectedUri;
+    Uri selectedUri, croppedUri, imgUri, destinationUri;
     User user;
     static Bitmap bitmap;
+
+    ProgressDialog progressDialog;
 
 
     @Override
@@ -59,6 +67,8 @@ public class RegisterActivity extends AppCompatActivity {
         registerConfirmPass = findViewById(R.id.registerConfirmPass);
         registerButton = findViewById(R.id.registerButton);
 
+        progressDialog = new ProgressDialog(this);
+
         imagePhoto.setOnClickListener(view -> selectPhoto());
         btn_selectPhoto.setOnClickListener(view -> selectPhoto());
         registerButton.setOnClickListener(view -> createUser());
@@ -66,8 +76,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     private void selectPhoto() {
-        onStart();
-        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         startActivityForResult(intent, 0);
     }
@@ -76,25 +85,40 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode){
-            case 0:
-                if (data!=null)
-                    if (data.getData()!=null){
-                        selectedUri = data.getData();
-                        try {
-                            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedUri);
-                            Matrix matrix = new Matrix();
-                            matrix.postRotate(90);
-                            Bitmap bitmapRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                            imagePhoto.setImageBitmap(bitmapRotated);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                break;
-            default:break;
+        if (requestCode == UCrop.RESULT_ERROR) {
+            Toast.makeText(this, "uCrop error", Toast.LENGTH_SHORT).show();
+            return;
         }
 
+        if (requestCode == UCrop.REQUEST_CROP) {
+            if (data==null){
+                onStart();
+            }else {
+                imgUri = UCrop.getOutput(data);
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(RegisterActivity.this.getContentResolver(),imgUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    imagePhoto.setImageBitmap(bitmap);
+            }
+
+        }
+        if (requestCode == 0 && resultCode == RESULT_OK) {
+            if (data!=null){
+                if (data.getData() != null) {
+                    selectedUri = data.getData();
+                    File tempCropped = new File(getCacheDir(), "tempImgCropped.png");
+                    destinationUri = Uri.fromFile(tempCropped);
+                    UCrop.of(selectedUri, destinationUri)
+                            .withAspectRatio(1, 1)
+                            //.withMaxResultSize(MAX_WIDTH, MAX_HEIGHT)
+                            .start(this);
+                    onStart();
+                }
+            }
+        }
     }
 
     private void createUser() {
@@ -129,13 +153,12 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void saveUserFirebase() {
-        String fileName = UUID.randomUUID().toString();
-        if (selectedUri != null){
+        if (imgUri != null){
             uid = FirebaseAuth.getInstance().getUid();
             username = registerName.getText().toString();
             emailUser = registerEmail.getText().toString();
             StorageReference fileRef = storageReference.child("users/" + uid + "/profile.jpg");
-            fileRef.putFile(selectedUri)
+            fileRef.putFile(imgUri)
                     .addOnSuccessListener(taskSnapshot -> {
                         fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
