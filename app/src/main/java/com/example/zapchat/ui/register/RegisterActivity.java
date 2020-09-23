@@ -1,11 +1,8 @@
 package com.example.zapchat.ui.register;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -22,17 +19,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.zapchat.R;
 import com.example.zapchat.ui.data.User;
 import com.example.zapchat.ui.ui.login.LoginActivity;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
+
+/**
+    Created by Henrique Teixeira, 23 september 2020
+*/
 
 public class RegisterActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
@@ -42,9 +40,8 @@ public class RegisterActivity extends AppCompatActivity {
     String uid, username, profileUrl;
     ImageView imagePhoto;
     StorageReference storageReference;
-    Uri selectedUri, croppedUri, imgUri, destinationUri;
+    Uri selectedUri, imgUri, destinationUri;
     User user;
-    static Bitmap bitmap;
 
     ProgressDialog progressDialog;
 
@@ -85,11 +82,13 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        //uCrop Error
         if (requestCode == UCrop.RESULT_ERROR) {
             Toast.makeText(this, "uCrop error", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        //Set image on activity or cancel crop back to activity
         if (requestCode == UCrop.REQUEST_CROP) {
             if (data==null){
                 onStart();
@@ -105,6 +104,8 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
         }
+
+        //get and crop image
         if (requestCode == 0 && resultCode == RESULT_OK) {
             if (data!=null){
                 if (data.getData() != null) {
@@ -121,6 +122,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    //Create user profile
     private void createUser() {
         nameUser = registerName.getText().toString();
         emailUser = registerEmail.getText().toString();
@@ -129,11 +131,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (nameUser == null || nameUser.isEmpty()){
             Toast.makeText(this, "Name is empty", Toast.LENGTH_SHORT).show();
-        }else {
-            if (emailUser == null || emailUser.isEmpty() || passUser == null || passUser.isEmpty()){
+        }else if (emailUser == null || emailUser.isEmpty() || passUser == null || passUser.isEmpty()){
                 Toast.makeText(this, "Email and Password are empty", Toast.LENGTH_SHORT).show();
-            }else {
-                if (nameUser != null || !nameUser.isEmpty() || emailUser != null || !emailUser.isEmpty() ||
+            }if (nameUser != null || !nameUser.isEmpty() ||
+                    emailUser != null || !emailUser.isEmpty() ||
                         passUser != null || !passUser.isEmpty()) {
                     if (cPassUser.equals(passUser)){
                         mAuth.createUserWithEmailAndPassword(emailUser, passUser)
@@ -148,37 +149,30 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(this, "Your password is different ", Toast.LENGTH_SHORT).show();
                     }
                 }
-            }
-        }
     }
 
+    //Save user profile in firebase
     private void saveUserFirebase() {
+        uid = FirebaseAuth.getInstance().getUid();
+        username = registerName.getText().toString();
+        emailUser = registerEmail.getText().toString();
         if (imgUri != null){
-            uid = FirebaseAuth.getInstance().getUid();
-            username = registerName.getText().toString();
-            emailUser = registerEmail.getText().toString();
             StorageReference fileRef = storageReference.child("users/" + uid + "/profile.jpg");
             fileRef.putFile(imgUri)
                     .addOnSuccessListener(taskSnapshot -> {
-                        fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                profileUrl = uri.toString();
-                                user = new User(uid, username, emailUser, profileUrl);
-                                FirebaseFirestore.getInstance().collection("users")
-                                        .add(user)
-                                        .addOnSuccessListener(documentReference -> Log.i("Upload user success", documentReference.getId()))
-                                        .addOnFailureListener(e -> Log.i("Upload user fail", e.getMessage(), e));
-                            }
+                        fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                            profileUrl = uri.toString();
+                            user = new User(uid, username, emailUser, profileUrl);
+                            FirebaseFirestore.getInstance().collection("users")
+                                    .add(user)
+                                    .addOnSuccessListener(documentReference -> Log.i("Upload user success", documentReference.getId()))
+                                    .addOnFailureListener(e -> Log.i("Upload user fail", e.getMessage(), e));
                         });
                     })
                     .addOnFailureListener(e -> {
                         Log.i("Upload image fail", e.getMessage(), e);
                     });
         }else {
-            uid = FirebaseAuth.getInstance().getUid();
-            username = registerName.getText().toString();
-            emailUser = registerEmail.getText().toString();
             user = new User(uid, username, emailUser, null);
 
             FirebaseFirestore.getInstance().collection("users")
@@ -193,13 +187,11 @@ public class RegisterActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //Back to login activity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                break;
-            default:break;
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
         }
         return true;
     }
