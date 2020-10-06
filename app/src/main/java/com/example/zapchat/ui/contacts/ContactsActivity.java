@@ -66,12 +66,7 @@ public class ContactsActivity extends AppCompatActivity {
             contactListAdapter = new ContactListAdapter(ContactsActivity.this, contacts);
             contactsList.setHasFixedSize(true);
             contactsList.setAdapter(contactListAdapter);
-            Collections.sort(contacts, new Comparator<User>() {
-                @Override
-                public int compare(User user, User t1) {
-                    return user.getUsername().compareTo(t1.getUsername());
-                }
-            });
+            Collections.sort(contacts, (user, t1) -> user.getUsername().compareTo(t1.getUsername()));
         }else {
             contactViewModel = new ViewModelProvider(this).get(ContactViewModel.class);
             contactViewModel.getText().observe(this, s -> contactsText.setText(s));
