@@ -18,17 +18,16 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.Comparator;
 
 public class ContactsActivity extends AppCompatActivity {
     TextView contactsText;
     RecyclerView contactsList;
     ContactListAdapter contactListAdapter;
     User user;
-    ArrayList<String> contacts;
-    ArrayList<String> profilePhoto;
+    ArrayList<User> contacts;
     FirebaseFirestore firebaseFirestore;
-    private ContactViewModel contactViewModel;
+    ContactViewModel contactViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +49,10 @@ public class ContactsActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
                         contacts = new ArrayList<>();
-                        profilePhoto = new ArrayList<>();
                         for (QueryDocumentSnapshot doc: task.getResult()){
                             Log.d("Test 1", doc.getId() + " => " + doc.getData());
                             user = doc.toObject(User.class);
                             Log.d("Test", user.getUsername() + user.getProfileUrl());
-
                             setContactList();
                         }
                     }
@@ -63,15 +60,13 @@ public class ContactsActivity extends AppCompatActivity {
     }
 
     private void setContactList() {
-
         if (contacts != null){
-            contacts.add(user.getUsername());
-            profilePhoto.add(user.getProfileUrl());
+            contacts.add(user);
             contactsList.setLayoutManager(new LinearLayoutManager(ContactsActivity.this));
-            contactListAdapter = new ContactListAdapter(ContactsActivity.this, contacts, profilePhoto);
+            contactListAdapter = new ContactListAdapter(ContactsActivity.this, contacts);
             contactsList.setHasFixedSize(true);
             contactsList.setAdapter(contactListAdapter);
-            Collections.sort(contacts);
+            Collections.sort(contacts, (user, t1) -> user.getUsername().compareTo(t1.getUsername()));
         }else {
             contactViewModel = new ViewModelProvider(this).get(ContactViewModel.class);
             contactViewModel.getText().observe(this, s -> contactsText.setText(s));
