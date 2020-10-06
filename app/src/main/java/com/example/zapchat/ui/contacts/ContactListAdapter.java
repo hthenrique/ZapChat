@@ -12,23 +12,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.zapchat.R;
 import com.example.zapchat.ui.data.User;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ViewHolder> {
 
-    ArrayList<DocumentSnapshot> mContactList;
-    ArrayList<String> profilePhotoList;
+    ArrayList<User> userArrayList;
     LayoutInflater mInflater;
     Context context;
-    User user;
 
-    public ContactListAdapter(ContactsActivity contactsLists, ArrayList<DocumentSnapshot> user){
-        this.mInflater = LayoutInflater.from(contactsLists);
-        this.mContactList = user;
-        //this.profilePhotoList = profilePhoto;
+    public ContactListAdapter(ContactsActivity contactsActivity, ArrayList<User> users){
+        this.mInflater = LayoutInflater.from(contactsActivity);
+        this.userArrayList = users;
     }
 
     @NonNull
@@ -42,18 +38,17 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        //String photo = user.getProfileUrl();
-        /*DocumentSnapshot contacts = mContactList.get(position);
+
         Picasso.get()
-                .load(String.valueOf(contacts))
+                .load(userArrayList.get(position).getProfileUrl())
                 .placeholder(R.drawable.ic_baseline_person_24)
                 .into(holder.contactPhoto);
-        holder.usernameCont.setText(user.getUsername());*/
+        holder.usernameCont.setText(userArrayList.get(position).getUsername());
     }
 
     @Override
     public int getItemCount() {
-        return mContactList.size();
+        return userArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
