@@ -20,6 +20,7 @@ import com.example.zapchat.R;
 import com.example.zapchat.ui.data.User;
 import com.example.zapchat.ui.ui.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -163,10 +164,10 @@ public class RegisterActivity extends AppCompatActivity {
                         fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
                             profileUrl = uri.toString();
                             user = new User(uid, username, emailUser, profileUrl);
-                            FirebaseFirestore.getInstance().collection("users")
-                                    .add(user)
-                                    .addOnSuccessListener(documentReference -> Log.i("Upload user success", documentReference.getId()))
+                            FirebaseFirestore.getInstance().collection("users").document(uid).set(user)
+                                    .addOnSuccessListener(documentReference -> Log.i("Upload user success", uid))
                                     .addOnFailureListener(e -> Log.i("Upload user fail", e.getMessage(), e));
+
                         });
                     })
                     .addOnFailureListener(e -> {
@@ -175,9 +176,8 @@ public class RegisterActivity extends AppCompatActivity {
         }else {
             user = new User(uid, username, emailUser, null);
 
-            FirebaseFirestore.getInstance().collection("users")
-                    .add(user)
-                    .addOnSuccessListener(documentReference -> Log.i("Upload user success", documentReference.getId()))
+            FirebaseFirestore.getInstance().collection("users").document(uid).set(user)
+                    .addOnSuccessListener(documentReference -> Log.i("Upload user success", uid))
                     .addOnFailureListener(e -> Log.i("Upload user fail", e.getMessage(), e));
         }
 

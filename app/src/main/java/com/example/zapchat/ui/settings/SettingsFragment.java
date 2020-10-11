@@ -1,8 +1,5 @@
 package com.example.zapchat.ui.settings;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.zapchat.R;
-import com.example.zapchat.ui.ui.login.LoginActivity;
+import com.example.zapchat.ui.util.Utils;
 
 public class SettingsFragment extends Fragment {
 
@@ -31,14 +28,14 @@ public class SettingsFragment extends Fragment {
         settingsList.setAdapter(adapter);
         settingsList.setOnItemClickListener((parent, view, position, id) -> {
             if (position==1){
-                logoutUser();
+                new Utils().logoutUser(getContext());
             }
         });
 
         return root;
     }
 
-    private void logoutUser() {
+    /*private void logoutUser() {
             SharedPreferences preferences = getContext().getSharedPreferences("login", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             editor.remove("isUserLogin");
@@ -47,6 +44,6 @@ public class SettingsFragment extends Fragment {
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-    }
+    }*/
 }
     

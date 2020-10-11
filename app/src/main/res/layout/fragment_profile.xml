@@ -27,7 +27,7 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/userPhoto"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:background="@drawable/bk_button_photo_rounded"
@@ -50,12 +50,23 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/userName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="User Name"
             android:textSize="30sp" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/deleteAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="Delete Accont"
+        android:textColor="@color/colorError"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
