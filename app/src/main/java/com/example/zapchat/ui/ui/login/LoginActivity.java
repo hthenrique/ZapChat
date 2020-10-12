@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.zapchat.MainActivity;
 import com.example.zapchat.R;
 import com.example.zapchat.ui.register.RegisterActivity;
+import com.example.zapchat.ui.util.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -27,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText passwordEditText;
     Button loginButton;
     TextView registerLink;
+    Context context;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(this, "Welcome", Toast.LENGTH_SHORT).show();
 
         //onStart();
-        autoLogin();
+        new Utils().autoLogin(getBaseContext());
 
         loginButton.setOnClickListener(v -> {
             loginUser();
@@ -66,23 +68,6 @@ public class LoginActivity extends AppCompatActivity {
         if (currentUser == null){
         }
     }*/
-
-    private void autoLogin() {
-        SharedPreferences preferences = getSharedPreferences( "login" , Context.MODE_PRIVATE);
-        String autoEmail = preferences.getString("email", "");
-        String autoPassword = preferences.getString("password", "");
-        if (preferences.contains("isUserLogin")){
-            mAuth.signInWithEmailAndPassword(autoEmail,autoPassword)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()){
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                        }
-                    });
-
-        }
-    }
 
     private void loginUser() {
         email = usernameEditText.getText().toString();
