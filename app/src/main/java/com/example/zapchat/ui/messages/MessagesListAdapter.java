@@ -37,7 +37,7 @@ public class MessagesListAdapter extends RecyclerView.Adapter<MessagesListAdapte
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View noteView = inflater.inflate(R.layout.messages_item, parent, false);
+        View noteView = inflater.inflate(R.layout.item_messages, parent, false);
         return new ViewHolder(noteView);
     }
 

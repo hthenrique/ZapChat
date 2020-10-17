@@ -32,8 +32,11 @@
             android:id="@+id/contactsList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
             tools:layout_conversion_absoluteHeight="603dp"
-            tools:layout_conversion_absoluteWidth="411dp" />
+            tools:layout_conversion_absoluteWidth="411dp"/>
     </LinearLayout>
 
 

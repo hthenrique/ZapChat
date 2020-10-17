@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(this, "Welcome", Toast.LENGTH_SHORT).show();
 
         //onStart();
-        new Utils().autoLogin(getBaseContext());
+
 
         loginButton.setOnClickListener(v -> {
             loginUser();

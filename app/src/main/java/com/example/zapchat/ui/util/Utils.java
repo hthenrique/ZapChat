@@ -25,6 +25,10 @@ public class Utils {
                             context.startActivity(intent);
                         }
                     });
+        }else{
+            Intent intent = new Intent(context, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
         }
     }
 

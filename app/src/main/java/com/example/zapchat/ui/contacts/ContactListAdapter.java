@@ -1,11 +1,13 @@
 package com.example.zapchat.ui.contacts;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,7 +34,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     public ContactListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View noteView = inflater.inflate(R.layout.contact_item, parent, false);
+        View noteView = inflater.inflate(R.layout.item_contact, parent, false);
         return new ContactListAdapter.ViewHolder(noteView);
     }
 
@@ -51,13 +53,26 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         return userArrayList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    User getItem(int position){
+        return userArrayList.get(position);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView usernameCont;
         ImageView contactPhoto;
         public ViewHolder(@NonNull View noteView) {
             super(noteView);
             usernameCont = noteView.findViewById(R.id.contactName);
             contactPhoto = noteView.findViewById(R.id.contactPhoto);
+            noteView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            User user = getItem(position);
+            //view.setBackgroundColor(context.getResources().getColor(R.color.colorPrimaryDark));
+            Toast.makeText(context, user.getUsername(), Toast.LENGTH_SHORT).show();
         }
     }
 }

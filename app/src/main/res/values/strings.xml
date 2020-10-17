@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">ZapChat</string>
-    <string name="title_chat">Chat</string>
+    <string name="title_messages">Messages</string>
     <string name="title_feeds">Feeds</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_profile">Profile</string>
+    <string name="title_settings">Settings</string>
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
@@ -18,7 +19,7 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="title_settings">Settings</string>
+
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
