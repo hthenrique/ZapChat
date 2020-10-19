@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SplashActivity">
+    tools:context=".SplashActivity"
+    android:background="@color/colorPrimary">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -14,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/zapchat_icon" />
+        app:srcCompat="@drawable/zapchat_symbol" />
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -31,13 +32,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="By" />
+            android:text="By"
+            android:textColor="@color/colorButton" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Henrique" />
+            android:text="Henrique"
+            android:textColor="@color/colorButton" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -47,21 +47,6 @@ public class MessagesFragment extends Fragment {
         newMessage.setOnClickListener(view -> showContacts());
 
         names = new ArrayList<>();
-        names.add("Horse");
-        names.add("Cow");
-        names.add("Camel");
-        names.add("Sheep");
-        names.add("Goat");
-        names.add("Horse");
-        names.add("Cow");
-        names.add("Camel");
-        names.add("Sheep");
-        names.add("Goat");
-        names.add("Horse");
-        names.add("Cow");
-        names.add("Camel");
-        names.add("Sheep");
-        names.add("Goat");
 
         setMessagesList();
 
