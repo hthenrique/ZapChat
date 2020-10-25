@@ -74,7 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     private void selectPhoto() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent, 0);
     }
@@ -167,7 +167,6 @@ public class RegisterActivity extends AppCompatActivity {
                             FirebaseFirestore.getInstance().collection("users").document(uid).set(user)
                                     .addOnSuccessListener(documentReference -> Log.i("Upload user success", uid))
                                     .addOnFailureListener(e -> Log.i("Upload user fail", e.getMessage(), e));
-
                         });
                     })
                     .addOnFailureListener(e -> {
