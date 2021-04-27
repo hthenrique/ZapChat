@@ -4,4 +4,5 @@ Aplicativo de conversas ao estilo "Whatsapp" mas com feed de postagens ao estilo
 
 ### Ferramentas
 * Firebase
+* Ucrop
 * Java
